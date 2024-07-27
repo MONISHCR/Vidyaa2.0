@@ -1,0 +1,177 @@
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const multer = require('multer');
+// const cors = require('cors');
+// const fs = require('fs');
+// const path = require('path');
+// require('dotenv').config(); // Load environment variables from .env file
+
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
+
+// // MongoDB connection
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => {
+//     console.log('Connected to MongoDB Atlas');
+//   })
+//   .catch((error) => {
+//     console.error('Error connecting to MongoDB Atlas:', error);
+//   });
+
+// // Schema and Model
+// const pdfSchema = new mongoose.Schema({
+//   subject: String,
+//   unit: String,
+//   pdfPath: String,
+// });
+
+// const Pdf = mongoose.model('Pdf', pdfSchema);
+
+// // Multer setup
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const { subject, unit } = req.body;
+//     const dir = path.join(__dirname, 'uploads', subject, `Unit_${unit}`);
+//     fs.mkdirSync(dir, { recursive: true });
+//     cb(null, dir);
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+// });
+
+// const upload = multer({ storage });
+
+// // Upload endpoint
+// app.post('/upload', upload.single('pdf'), async (req, res) => {
+//   const { subject, unit } = req.body;
+//   const pdfPath = path.join('uploads', subject, `Unit_${unit}`, req.file.originalname);
+
+//   const pdf = new Pdf({
+//     subject,
+//     unit,
+//     pdfPath,
+//   });
+
+//   try {
+//     await pdf.save();
+//     res.status(200).send('PDF uploaded successfully');
+//   } catch (error) {
+//     res.status(500).send('Error uploading PDF');
+//   }
+// });
+
+// // Fetch PDFs endpoint
+// app.get('/pdfs', async (req, res) => {
+//   try {
+//     const pdfs = await Pdf.find();
+//     res.json(pdfs);
+//   } catch (error) {
+//     res.status(500).send('Error fetching PDFs');
+//   }
+// });
+
+// // Serve static files
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// app.listen(5000, () => {
+//   console.log('Server running on port 5000');
+// // });
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const multer = require('multer');
+// const cors = require('cors');
+// const fs = require('fs');
+// const path = require('path');
+// require('dotenv').config(); // Load environment variables from .env file
+
+// const Pdf = require('./models/pdf'); // Assuming pdf.js is the file for the schema
+
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
+
+// // MongoDB connection
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => {
+//     console.log('Connected to MongoDB Atlas');
+//   })
+//   .catch((error) => {
+//     console.error('Error connecting to MongoDB Atlas:', error);
+//   });
+
+// // Multer setup
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const { subject, unit } = req.body;
+//     const dir = path.join(__dirname, 'uploads', subject, `Unit_${unit}`);
+//     fs.mkdirSync(dir, { recursive: true });
+//     cb(null, dir);
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+// });
+
+// const upload = multer({ storage });
+
+// const commonSubjects = {
+//   CP: ['CSM', 'CSD', 'IT'],
+//   CN: ['CSM', 'CSD'],
+//   FEWD: ['CSE', 'IT'],
+//   'NEURAL NETWORKS': ['CSE', 'IT'],
+//   IOT: ['CSE', 'IT'],
+// };
+
+// // Upload endpoint
+// app.post('/upload', upload.single('pdf'), async (req, res) => {
+//   const { branch, subject, unit } = req.body;
+//   const pdfPath = path.join('uploads', subject, `Unit_${unit}`, req.file.originalname);
+
+//   const branches = commonSubjects[subject] ? commonSubjects[subject] : [branch];
+
+//   try {
+//     // Check if PDF already exists for the subject and branches
+//     let pdf = await Pdf.findOne({ subject, branches: { $in: branches } });
+
+//     if (pdf) {
+//       // Update existing entry
+//       pdf.units.push(unit);
+//       pdf.units = [...new Set(pdf.units)]; // Remove duplicates
+//       pdf.pdfPath = pdfPath; // Update path in case the file is replaced
+//       await pdf.save();
+//     } else {
+//       // Create a new entry
+//       pdf = new Pdf({
+//         branches,
+//         subject,
+//         units: [unit],
+//         pdfPath,
+//       });
+//       await pdf.save();
+//     }
+
+//     res.status(200).send('PDF uploaded successfully');
+//   } catch (error) {
+//     res.status(500).send('Error uploading PDF');
+//   }
+// });
+
+// // Fetch PDFs endpoint
+// app.get('/pdfs', async (req, res) => {
+//   try {
+//     const pdfs = await Pdf.find();
+//     res.json(pdfs);
+//   } catch (error) {
+//     res.status(500).send('Error fetching PDFs');
+//   }
+// });
+
+// // Serve static files
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// app.listen(5000, () => {
+//   console.log('Server running on port 5000');
+// });
+
