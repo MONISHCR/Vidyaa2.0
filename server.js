@@ -1,5 +1,4 @@
 
-
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
@@ -29,6 +28,11 @@ mongoose.connect(process.env.MONGO_URI)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const { subject, unit } = req.body;
+    
+    if (!subject || !unit) {
+      return cb(new Error('Subject and unit are required fields'));
+    }
+
     const dir = path.join(__dirname, 'uploads', subject, `Unit_${unit}`);
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
@@ -40,20 +44,31 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-const commonSubjects = {
-  CP: ['CSE', 'CSM', 'CSD', 'IT'],
-  CN: ['CSM', 'CSD'],
-  FEWD: ['CSE', 'IT'],
-  'NEURAL NETWORKS': ['CSE', 'IT'],
-  IOT: ['CSE', 'IT'],
+const semesterSubjects = {
+  '4-1': {
+    BEFA: ['CSE', 'CSM', 'CSD', 'IT'],
+    IPR: ['CSE', 'CSM', 'CSD', 'IT'],
+    DVT: ['CSM', 'CSD','CSE'],
+  },
+  '3-2': {
+    CP: ['CSE', 'CSM', 'CSD', 'IT'],
+    CN: ['CSM', 'CSD'],
+    FEWD: ['CSE', 'IT'],
+    'NEURAL NETWORKS': ['CSE', 'IT'],
+    IOT: ['CSE', 'IT'],
+  },
+  // Define other semesters similarly
 };
 
 // Upload endpoint
 app.post('/upload', upload.single('pdf'), async (req, res) => {
-  const { branch, subject, unit } = req.body;
-  const pdfPath = path.join('uploads', subject, `Unit_${unit}`, req.file.originalname);
+  const { branch, subject, unit, sem } = req.body;
+  if (!branch || !subject || !unit || !sem) {
+    return res.status(400).send('Branch, subject, unit, and semester are required fields');
+  }
 
-  const branches = commonSubjects[subject] ? commonSubjects[subject] : [branch];
+  const pdfPath = path.join('uploads', subject, `Unit_${unit}`, req.file.originalname);
+  const branches = semesterSubjects[sem] && semesterSubjects[sem][subject] ? semesterSubjects[sem][subject] : [branch];
 
   try {
     let existingPdf = await Pdf.findOne({ subject, units: unit, pdfPaths: pdfPath });
@@ -62,7 +77,7 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
       return res.status(409).send('File already exists');
     }
 
-    let pdf = await Pdf.findOne({ subject, branches: { $in: branches } });
+    let pdf = await Pdf.findOne({ subject, branches: { $in: branches }, sem });
 
     if (pdf) {
       pdf.units.push(unit);
@@ -76,6 +91,7 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
         subject,
         units: [unit],
         pdfPaths: [pdfPath],
+        sem,
       });
       await pdf.save();
     }
@@ -113,15 +129,11 @@ app.post('/zip-and-download', async (req, res) => {
       return res.status(404).send('No PDFs found for the selected units');
     }
 
-    // Create a zip archive
     const archive = archiver('zip', { zlib: { level: 9 } });
     const zipFileName = `${subject}_Units_${units.join('_')}.zip`;
 
-    // Set headers to force download
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename="${zipFileName}"`);
-
-    // Pipe the archive to the response
     archive.pipe(res);
 
     pdfs.forEach((pdf) => {
@@ -140,8 +152,11 @@ app.post('/zip-and-download', async (req, res) => {
   }
 });
 
+
+// Serve static files
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Download endpoint for single PDF
 app.get('/download/:subject/:unit/:filename', (req, res) => {

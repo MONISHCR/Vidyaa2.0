@@ -1,10 +1,15 @@
+
+
 const mongoose = require('mongoose');
 
 const pdfSchema = new mongoose.Schema({
   branches: [String],
   subject: String,
   units: [String],
-  pdfPaths: [String], // Updated to store multiple file paths
+  pdfPaths: [String],
+  sem: String
 });
 
-module.exports = mongoose.model('Pdf', pdfSchema);
+const Pdf = mongoose.model('Pdf', pdfSchema);
+
+module.exports = Pdf;
