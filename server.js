@@ -57,6 +57,13 @@ const semesterSubjects = {
     'NEURAL NETWORKS': ['CSE', 'IT'],
     IOT: ['CSE', 'IT'],
   },
+  '3-2': {
+    DAA: ['CSE', 'CSM', 'CSD', 'IT'],
+    SE: ['CSE', 'CSM', 'CSD', 'IT'],
+    WT: ['CSE','CSM', 'IT'],
+    PP: ['CSE', 'CSM', 'CSD', 'IT'],
+   
+  },
   // Define other semesters similarly
 };
 
