@@ -62,6 +62,16 @@ const semesterSubjects = {
     SE: ['CSE', 'CSM', 'CSD', 'IT'],
     WT: ['CSE','CSM', 'IT'],
     PP: ['CSE', 'CSM', 'CSD', 'IT'],
+    'AI MANDATE': ['CSE', 'CSM', 'CSD', 'IT'],
+   
+  },
+  '2-1': {
+    ADE: ['CSE', 'CSM', 'CSD', 'IT'],
+    COA: ['CSE', 'CSM', 'CSD', 'IT'],
+    DSCPP: ['CSE', 'CSM', 'CSD', 'IT'],
+    IML: ['CSE', 'CSM', 'CSD', 'IT'],
+    COA: ['CSE', 'CSM', 'CSD', 'IT'],
+    MFCS: ['CSE', 'CSM', 'CSD', 'IT'],
    
   },
   // Define other semesters similarly
