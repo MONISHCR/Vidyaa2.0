@@ -65,12 +65,18 @@ const semesterSubjects = {
     'AI MANDATE': ['CSE', 'CSM', 'CSD', 'IT'],
    
   },
+  '2-2': {
+    SMCS: ['CSE', 'CSM', 'CSD', 'IT'],
+    JAVA: ['CSE', 'CSM', 'CSD', 'IT'],
+    DBMS: ['CSE', 'CSM', 'CSD', 'IT'],
+    OS: ['CSE', 'CSM', 'CSD', 'IT'],
+    ACD: ['CSE', 'CSM', 'CSD', 'IT'],   
+  },
   '2-1': {
     ADE: ['CSE', 'CSM', 'CSD', 'IT'],
     COA: ['CSE', 'CSM', 'CSD', 'IT'],
     DSCPP: ['CSE', 'CSM', 'CSD', 'IT'],
     IML: ['CSE', 'CSM', 'CSD', 'IT'],
-    COA: ['CSE', 'CSM', 'CSD', 'IT'],
     MFCS: ['CSE', 'CSM', 'CSD', 'IT'],
    
   },
