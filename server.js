@@ -56,6 +56,7 @@ const semesterSubjects = {
     FEWD: ['CSE', 'IT'],
     'NEURAL NETWORKS': ['CSE', 'IT'],
     IOT: ['CSE', 'IT'],
+    'CS MANDATE': ['CSE', 'CSM', 'CSD', 'IT'],
   },
   '3-1': {
     DAA: ['CSE', 'CSM', 'CSD', 'IT'],
