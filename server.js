@@ -94,6 +94,7 @@ const semesterSubjects = {
     PPS: ['CSE', 'CSM', 'CSD', 'IT'],
     ACT: ['CSE', 'CSM', 'CSD', 'IT'],
     EG: ['CSM', 'CSD', 'IT'],
+    'ES MANDATE': ['CSM', 'CSD', 'IT'],
     CHEMISTRY: [ 'CSM', 'CSD', 'IT'],
    
   },
