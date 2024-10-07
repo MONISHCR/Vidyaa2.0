@@ -146,34 +146,45 @@ app.post('/zip-and-download', async (req, res) => {
   }
 
   try {
+    // Fetch PDFs matching the subject and selected units
     const pdfs = await Pdf.find({ subject, units: { $in: units } });
 
     if (pdfs.length === 0) {
       return res.status(404).send('No PDFs found for the selected units');
     }
 
+    // Create a zip archive
     const archive = archiver('zip', { zlib: { level: 9 } });
     const zipFileName = `${subject}_Units_${units.join('_')}.zip`;
 
+    // Set headers for zip file download
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename="${zipFileName}"`);
+
+    // Pipe the archive stream to the response
     archive.pipe(res);
 
-    pdfs.forEach((pdf) => {
-      pdf.pdfPaths.forEach((filePath) => {
+    // Add each file to the archive
+    for (const pdf of pdfs) {
+      for (const filePath of pdf.pdfPaths) {
         const fullFilePath = path.join(__dirname, filePath);
         if (fs.existsSync(fullFilePath)) {
           archive.file(fullFilePath, { name: path.basename(fullFilePath) });
+        } else {
+          console.error(`File not found: ${fullFilePath}`);
         }
-      });
-    });
+      }
+    }
 
-    archive.finalize();
+    // Finalize the archive
+    await archive.finalize();
+
   } catch (error) {
     console.error('Error zipping PDFs:', error);
     res.status(500).send('Error zipping PDFs');
   }
 });
+
 
 
 // Serve static files
