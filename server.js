@@ -47,7 +47,7 @@ const upload = multer({ storage });
 const semesterSubjects = {
   '4-1': {
     BEFA: ['CSE', 'CSM', 'CSD', 'IT'],
-    IPR: ['CSE', 'CSM', 'CSD', 'IT'],
+    'IPR MANDATE': ['CSE', 'CSM', 'CSD', 'IT'],
     DVT: ['CSM', 'CSD','CSE'],
   },
   '3-2': {
