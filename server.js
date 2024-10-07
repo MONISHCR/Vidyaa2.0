@@ -81,6 +81,21 @@ const semesterSubjects = {
     MFCS: ['CSE', 'CSM', 'CSD', 'IT'],
    
   },
+  '1-2': {
+    PP: ['CSE', 'CSM', 'CSD', 'IT'],
+    LADE: ['CSE', 'CSM', 'CSD', 'IT'],
+    BEEE: ['CSM', 'CSD', 'IT'],
+    EP: [ 'CSM', 'CSD', 'IT'],
+    CE: [ 'CSM', 'CSD', 'IT'],
+   
+  },
+  '1-1': {
+    PPS: ['CSE', 'CSM', 'CSD', 'IT'],
+    ACT: ['CSE', 'CSM', 'CSD', 'IT'],
+    EG: ['CSM', 'CSD', 'IT'],
+    CHEMISTRY: [ 'CSM', 'CSD', 'IT'],
+   
+  },
   // Define other semesters similarly
 };
 
