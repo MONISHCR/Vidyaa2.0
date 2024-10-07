@@ -62,6 +62,7 @@ const semesterSubjects = {
     SE: ['CSE', 'CSM', 'CSD', 'IT'],
     WT: ['CSE','CSM', 'IT'],
     PP: ['CSE', 'CSM', 'CSD', 'IT'],
+    DCN:['CSE','IT'],
     'AI MANDATE': ['CSE', 'CSM', 'CSD', 'IT'],
    
   },
