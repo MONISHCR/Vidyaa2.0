@@ -7,6 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 require('dotenv').config();
+const axios = require('axios');
+
 
 const Pdf = require('./models/pdf');
 
@@ -43,6 +45,19 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+const keepServerAlive = () => {
+  setInterval(async () => {
+    try {
+      await axios.get('https://vidyaa2-0-1.onrender.com/ping');
+      console.log('Pinged the server to keep it alive.');
+    } catch (error) {
+      console.error('Error pinging the server:', error);
+    }
+  }, 1 * 60 * 1000); // Ping every 5 minutes
+};
+
+keepServerAlive();
 
 const semesterSubjects = {
   '4-1': {
@@ -142,6 +157,10 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
     console.error('Error uploading PDF:', error);
     res.status(500).send('Error uploading PDF');
   }
+});
+//server alive
+app.get('/ping', (req, res) => {
+  res.status(200).send('Server is alive');
 });
 
 // Fetch PDFs endpoint
