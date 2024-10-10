@@ -183,7 +183,7 @@ app.post('/zip-and-download', async (req, res) => {
   }
 
   try {
-    // Fetch PDFs matching the subject and selected units
+    // Fetch PDFs matching the subject and selected units from MongoDB
     const pdfs = await Pdf.find({ subject, units: { $in: units } });
 
     if (pdfs.length === 0) {
@@ -201,11 +201,12 @@ app.post('/zip-and-download', async (req, res) => {
     // Pipe the archive stream to the response
     archive.pipe(res);
 
-    // Add each file to the archive
+    // Loop over each document and add files to the archive
     for (const pdf of pdfs) {
       for (const filePath of pdf.pdfPaths) {
         const fullFilePath = path.join(__dirname, filePath);
         if (fs.existsSync(fullFilePath)) {
+          // Stream file into the archive
           archive.file(fullFilePath, { name: path.basename(fullFilePath) });
         } else {
           console.error(`File not found: ${fullFilePath}`);
@@ -221,6 +222,7 @@ app.post('/zip-and-download', async (req, res) => {
     res.status(500).send('Error zipping PDFs');
   }
 });
+
 
 
 
