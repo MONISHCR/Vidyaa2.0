@@ -54,7 +54,7 @@ const keepServerAlive = () => {
     } catch (error) {
       console.error('Error pinging the server:', error);
     }
-  }, 1 * 60 * 1000); // Ping every 5 minutes
+  }, 8 * 60 * 1000); // Ping every 5 minutes
 };
 
 keepServerAlive();
