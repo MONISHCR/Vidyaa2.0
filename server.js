@@ -54,7 +54,7 @@ const keepServerAlive = () => {
     } catch (error) {
       console.error('Error pinging the server:', error);
     }
-  }, 60 * 60 * 1000); // Ping every 5 minutes
+  }, 60 * 60 * 1000); 
 };
 
 keepServerAlive();
@@ -204,7 +204,9 @@ app.post('/zip-and-download', async (req, res) => {
     // Loop over each document and add files to the archive
     for (const pdf of pdfs) {
       for (const filePath of pdf.pdfPaths) {
-        const fullFilePath = path.join(__dirname, filePath);
+        // Convert backslashes to forward slashes
+        const fullFilePath = path.join(__dirname, filePath.replace(/\\/g, '/'));
+    
         if (fs.existsSync(fullFilePath)) {
           // Stream file into the archive
           archive.file(fullFilePath, { name: path.basename(fullFilePath) });
