@@ -8,7 +8,7 @@ const path = require('path');
 const archiver = require('archiver');
 require('dotenv').config();
 const axios = require('axios');
-
+const bcrypt = require('bcrypt'); 
 
 const Pdf = require('./models/pdf');
 
@@ -43,6 +43,22 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
+// Admin login route
+app.post('/admin/login', (req, res) => {
+  const { username, password } = req.body;
+
+  const adminCredentials = {
+    username: 'admin',
+    password: 'MonishV2119$',
+  };
+
+  if (username === adminCredentials.username && password === adminCredentials.password) {
+    return res.status(200).send('Login successful');
+  } else {
+    return res.status(401).send('Invalid credentials');
+  }
+});
+
 
 const upload = multer({ storage });
 
@@ -58,6 +74,8 @@ const keepServerAlive = () => {
 };
 
 keepServerAlive();
+
+
 
 const semesterSubjects = {
   '4-1': {
