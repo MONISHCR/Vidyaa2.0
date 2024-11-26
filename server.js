@@ -8,7 +8,7 @@ const path = require('path');
 const archiver = require('archiver');
 require('dotenv').config();
 const axios = require('axios');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcryptjs'); 
 
 const Pdf = require('./models/pdf');
 
